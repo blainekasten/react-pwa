@@ -1,0 +1,15 @@
+:global(#root), html, body {
+  height: 100%;
+  width: 100%;
+  background: lightgray;
+}
+
+:global(.header) {
+  width: 100%;
+  line-height: 4rem;
+  background: gray;
+}
+
+:global(.header) a {
+  margin: 1rem;
+}
