@@ -1,7 +1,7 @@
 {
-  "name": "AppolloWeb",
-  "version": "0.1.0",
-  "private": true,
+  "name": "react-pwa",
+  "version": "0.0.1",
+  "main": "index.js",
   "devDependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "custom-react-scripts": "^0.0.23"
