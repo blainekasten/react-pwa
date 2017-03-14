@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 window.React = React;
 import ReactDOM from 'react-dom';

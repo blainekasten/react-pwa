@@ -1,4 +1,6 @@
-let state = {
+//@flow
+import type { InternalState } from './types';
+let state:InternalState = {
   isLoading: false, // needs to default to false if we are not rendering a pwa site
   appConfig: {}, // config that describes the PWA
   error: false, // informs if we render the Error module
@@ -8,15 +10,15 @@ let state = {
 let subscriber = () => {};
 
 export default {
-  subscribe(fn) {
+  subscribe(fn:Function):void {
     subscriber = fn;
   },
 
-  getState() {
+  getState():InternalState {
     return state;
   },
 
-  setState(_state) {
+  setState(_state:Object) {
     state = {
       ...state,
       ..._state,

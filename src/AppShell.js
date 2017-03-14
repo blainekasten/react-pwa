@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import { PWALink as Link } from './ReactPWA';
 import './style.css';

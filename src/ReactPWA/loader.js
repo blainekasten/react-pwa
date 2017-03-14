@@ -1,5 +1,7 @@
+// @flow
+
 import State from './state';
-import type { AppConfig } from './types';
+import type { AppConfig, UrlConfig } from './types';
 // asset 1 is rendered
 
 let styleNode;
@@ -13,7 +15,7 @@ export function loadAssets(url:string) : void {
   removePreviousLoadingNodes();
 
   const appConfig:AppConfig = State.getState().appConfig;
-  const urlConfig = appConfig[url];
+  const urlConfig:UrlConfig = appConfig[url];
 
   // do not try to load assets if this url is not registered
   if (!urlConfig) return;
@@ -28,20 +30,20 @@ export function loadAssets(url:string) : void {
     loadPrefetch(urlConfig.dataPrefetchUrl),
     loadModule(urlConfig.moduleUrl),
     loadStyle(urlConfig.styleUrl),
-  ]).then(([moduleProps]) => {
+  ]).then(([moduleProps:Object]):void => {
     clearTimeout(loadingTimeout);
     State.setState({
       isLoading: false,
       error: false,
       moduleProps,
     });
-  }).catch(errorValue => {
+  }).catch((errorValue:Error):void => {
     clearTimeout(loadingTimeout);
     State.setState({isLoading: false, error: true, errorValue});
   });
 }
 
-function loadPrefetch(dataPrefetchUrl:string):Promise {
+function loadPrefetch(dataPrefetchUrl:?string):Promise<Object> {
   if (!dataPrefetchUrl || dataPrefetchUrl.length === 0) {
     return new Promise(resolve => resolve({}));
   }
@@ -49,7 +51,7 @@ function loadPrefetch(dataPrefetchUrl:string):Promise {
   return fetch(dataPrefetchUrl).then(resp => resp.json());
 }
 
-function loadModule(moduleUrl:string):Promise {
+function loadModule(moduleUrl:string):Promise<Event> {
   return new Promise((resolve, reject) => {
     scriptNode = document.createElement('script');
     scriptNode.src = moduleUrl;
@@ -58,11 +60,11 @@ function loadModule(moduleUrl:string):Promise {
     scriptNode.onload = resolve;
     scriptNode.onerror = reject;
 
-    document.body.appendChild(scriptNode);
+    window.document.body.appendChild(scriptNode);
   });
 }
 
-function loadStyle(styleUrl:string):Promise {
+function loadStyle(styleUrl:string):Promise<Event> {
   return new Promise((resolve, reject) => {
     styleNode = document.createElement('link');
     styleNode.href = styleUrl;
@@ -72,7 +74,7 @@ function loadStyle(styleUrl:string):Promise {
     styleNode.onload = resolve;
     styleNode.onerror = reject;
 
-    document.body.appendChild(styleNode);
+    window.document.body.appendChild(styleNode);
   });
 }
 
@@ -81,11 +83,12 @@ function loadStyle(styleUrl:string):Promise {
 */
 function removePreviousLoadingNodes() {
   if (styleNode) {
-    styleNode.parentElement.removeChild(styleNode);
+    styleNode.parentElement && styleNode.parentElement.removeChild(styleNode);
     styleNode = undefined;
   }
+
   if (scriptNode) {
-    scriptNode.parentElement.removeChild(scriptNode);
+    scriptNode.parentElement && scriptNode.parentElement.removeChild(scriptNode);
     scriptNode = undefined;
   }
 }

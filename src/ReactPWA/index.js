@@ -1,9 +1,11 @@
+// @flow
 import React from 'react';
 import Router from 'react-router-dom/BrowserRouter';
 import RRLink from 'react-router-dom/Link';
 import { loadAssets } from './loader';
 import State from './state';
 import Popstate from './popstate';
+import type { ProgressiveWebAppProps } from './types';
 
 export class ProgressiveWebApp extends React.Component {
   static propTypes = {
@@ -14,8 +16,8 @@ export class ProgressiveWebApp extends React.Component {
     Loader: React.PropTypes.func,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props:ProgressiveWebAppProps) {
+    super(props);
     Popstate.createPopStateListener();
     State.setState({appConfig: this.props.config});
     State.subscribe(() => this.forceUpdate());
