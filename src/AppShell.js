@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from './ReactPWA';
+import { PWALink as Link } from './ReactPWA';
 import './style.css';
 
 export default class App extends Component {
@@ -13,6 +13,8 @@ export default class App extends Component {
         <div className="header">
           <Link to="/">Home</Link>
           <Link to="/about">about</Link>
+          <Link to="/fail">Failing URL</Link>
+          <Link to="/not-pwa">NOT PWA</Link>
         </div>
         <div className="body">
           {this.props.children}

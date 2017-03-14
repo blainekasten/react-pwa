@@ -6,14 +6,15 @@ Things that are exported:
 
 ```js
 import {
-  ReactPWA,
-  Link,
+  ProgressiveWebApp,
+  PWALink,
 } from 'react-pwa';
 
 render(
-  <ReactPWA
+  <ProgressiveWebApp
     AppShell={Component}
-    loading={LoadingComponent}
+    Loader={LoadingComponent}
+    Error={ErrorComponent}
     config={config}
   />
 );

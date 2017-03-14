@@ -1,4 +1,5 @@
 import State from './state';
+import type { AppConfig } from './types';
 // asset 1 is rendered
 
 let styleNode;
@@ -8,21 +9,44 @@ let scriptNode;
 // delay in loading
 // transition to render asset 2
 // asset 2 is rendered
-export function loadAssets(moduleUrl:string, styleUrl:string) : void {
-  State.setState({isLoading: true});
+export function loadAssets(url:string) : void {
   removePreviousLoadingNodes();
 
+  const appConfig:AppConfig = State.getState().appConfig;
+  const urlConfig = appConfig[url];
+
+  // do not try to load assets if this url is not registered
+  if (!urlConfig) return;
+
+  // only show loading spinner if it takes more than 200ms to get response
+  const loadingTimeout = setTimeout(() => {
+    State.setState({isLoading: true});
+  }, 200);
+
+
   Promise.all([
-    loadModule(moduleUrl),
-    loadStyle(styleUrl),
-  ]).then((assets) => {
-    console.log(assets);
-    setTimeout(() => {
-      State.setState({isLoading: false});
-    }, 600);
-  }).catch(e => {
-    console.log('error', e);
+    loadPrefetch(urlConfig.dataPrefetchUrl),
+    loadModule(urlConfig.moduleUrl),
+    loadStyle(urlConfig.styleUrl),
+  ]).then(([moduleProps]) => {
+    clearTimeout(loadingTimeout);
+    State.setState({
+      isLoading: false,
+      error: false,
+      moduleProps,
+    });
+  }).catch(errorValue => {
+    clearTimeout(loadingTimeout);
+    State.setState({isLoading: false, error: true, errorValue});
   });
+}
+
+function loadPrefetch(dataPrefetchUrl:string):Promise {
+  if (!dataPrefetchUrl || dataPrefetchUrl.length === 0) {
+    return new Promise(resolve => resolve({}));
+  }
+
+  return fetch(dataPrefetchUrl).then(resp => resp.json());
 }
 
 function loadModule(moduleUrl:string):Promise {

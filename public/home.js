@@ -27,6 +27,9 @@ var PWAModule = (_temp = _class = function (_Component) {
         'div',
         {
           className: 'renderedBody',
+          style: {
+            color: this.props.textColor,
+          }
         },
         "HOME"
       );
