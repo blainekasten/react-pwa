@@ -22,7 +22,6 @@ render(
 
 *TODO*
 
-- support popstate from browser buttons
 - Add docs
 - Break from create-react-app
 - publish valid version
