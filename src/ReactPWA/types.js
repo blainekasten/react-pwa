@@ -10,10 +10,14 @@ export type AppConfig = {
   [url:string]: UrlConfig,
 };
 
+export type Loader = ReactClass<{}>;
+export type Error = ReactClass<{error: Object}>;
+export type AppShell = ReactClass<{children: Object}>;
+
 export type ProgressiveWebAppProps = {
-  AppShell: ReactClass<{children: Object}>,
-  Error: ReactClass<{error: Object}>,
-  Loader: ReactClass<{}>,
+  AppShell: AppShell,
+  Error: Error,
+  Loader: Loader,
   config: AppConfig,
   render: ?Function,
 };

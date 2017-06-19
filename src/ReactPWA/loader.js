@@ -2,6 +2,7 @@
 
 import State from './state';
 import type { AppConfig, UrlConfig } from './types';
+import fetchToText from './fetchToText';
 // asset 1 is rendered
 
 let styleNode;
@@ -52,27 +53,21 @@ function loadPrefetch(dataPrefetchUrl:?string):Promise<Object> {
 }
 
 function loadModule(moduleUrl:string):Promise<Event> {
-  return new Promise((resolve, reject) => {
+  return fetchToText(moduleUrl, 'text/javascript').then(js => {
     scriptNode = document.createElement('script');
-    scriptNode.src = moduleUrl;
     scriptNode.type = 'text/javascript';
-
-    scriptNode.onload = resolve;
-    scriptNode.onerror = reject;
+    scriptNode.innerHTML = js;
 
     window.document.body.appendChild(scriptNode);
   });
 }
 
 function loadStyle(styleUrl:string):Promise<Event> {
-  return new Promise((resolve, reject) => {
+  return fetchToText(styleUrl, 'text/css').then(css => {
     styleNode = document.createElement('link');
-    styleNode.href = styleUrl;
     styleNode.type = 'text/css';
     styleNode.rel = 'stylesheet';
-
-    styleNode.onload = resolve;
-    styleNode.onerror = reject;
+    styleNode.innerHTML = css;
 
     window.document.body.appendChild(styleNode);
   });

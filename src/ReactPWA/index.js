@@ -28,10 +28,10 @@ export class ProgressiveWebApp extends React.Component {
   }
 
   render() {
-    const { AppShell, Loader , Error } = this.props;
+    const { AppShell, Loader, Error } = this.props;
     const LoadingComponent = Loader || function NullLoader() { return null; };
     const ErrorComponent = Error || function NullError() { return null; };
-    let children;
+    let children:?ReactClass<{}>;
 
     // only set children IF this path is registered
     if (State.getState().appConfig[location.pathname]){
